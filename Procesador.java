@@ -14,7 +14,7 @@ public class Procesador {
         this.codigo = codigo;
         this.refrigerado = refrigerado;
         this.anio = anio;
-        this.cantTareasCriticas=0;
+        this.cantTareasCriticas = 0;
     }
 
     public String getId() {
@@ -33,11 +33,17 @@ public class Procesador {
         return anio;
     }
 
+
     public int getCantTareasCriticas() {
         return cantTareasCriticas;
     }
 
     public void setCantTareasCriticas(int cantTareasCriticas) {
         this.cantTareasCriticas = cantTareasCriticas;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

@@ -7,30 +7,42 @@ import java.util.*;
 public class Backtracking {
     private HashMap<Procesador, LinkedList<Tarea>> solucion;
     private LinkedList<Procesador> procesadores;
-    //private List<Tarea> tareas;
-
+    private LinkedList<Tarea> tareas;
 
     public Backtracking(String pathProcesadores, String pathTareas) {
         CSVReader reader = new CSVReader();
-        //this.tareas = reader.readTasks(pathTareas);
+        this.tareas = reader.readTasks(pathTareas);
         this.procesadores = reader.readProcessors(pathProcesadores);
 
 
         this.solucion = new HashMap<Procesador, LinkedList<Tarea>>();
+        for (Procesador p : procesadores)
+            solucion.put(p, new LinkedList<Tarea>());
 
     }
 
     public HashMap<Procesador, LinkedList<Tarea>> asignacionTareas(Integer tiempoMaximoProcNoRefrigerado) {
-        LinkedList<Procesador> solucionParcial = new LinkedList<>();
-
-        backtracking(tareas.get(0), procesadores.get(0), solucionParcial, tiempoMaximoProcNoRefrigerado);
+        LinkedList<Tarea> colaTareas = new LinkedList<>(this.tareas);
+        backtracking(null, colaTareas, tiempoMaximoProcNoRefrigerado);
         return solucion;
     }
 
-    private void backtracking(Tarea tareaActual, Procesador procesadorActual, LinkedList<Procesador> solucionParcial, Integer tiempoMaximoProcNoRefrigerado) {
-        //SI ENCONTRE POSIBLE SOLUCION, DAME EL SIGUIENTE PROCESADOR
-        //SI LA SUMA DE TODOS LOS TIEMPOS DE LOS PROCESADORES DE LA SOLUCION PARCIAL ES MENOR A LA SOLUCION ACTUAL
-        //REEMPLAZO LAS SOLUCIONES
+    private void backtracking(Procesador procesadorActual, LinkedList<Tarea> colaTareas, Integer tiempoMaximoProcNoRefrigerado) {
+        if (colaTareas.isEmpty()) {
+
+            System.out.println("");
+            System.out.println(solucion);
+        } else {
+            for (Procesador p : this.procesadores) {
+                Tarea nextTarea = colaTareas.remove();
+                agregarTareaAProc(p, nextTarea);
+                backtracking(p, colaTareas, tiempoMaximoProcNoRefrigerado);
+                sacarTareaAProc(p, nextTarea);
+                colaTareas.add(0, nextTarea);
+            }
+        }
+
+
     }
 
 
@@ -63,9 +75,7 @@ public class Backtracking {
     }
 
 
-    private void reemplazarSolucion(Procesador procesador) {
 
-    }
 
 
     public static void main(String[] args) {
