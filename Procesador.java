@@ -38,8 +38,12 @@ public class Procesador {
         return cantTareasCriticas;
     }
 
-    public void setCantTareasCriticas(int cantTareasCriticas) {
-        this.cantTareasCriticas = cantTareasCriticas;
+    public void incrementarTareasCriticas() {
+        this.cantTareasCriticas++;
+    }
+
+    public void decrementarTareasCriticas() {
+        this.cantTareasCriticas--;
     }
 
     @Override
