@@ -38,12 +38,12 @@ public class Backtracking {
         if (colaTareas.isEmpty()) {//SI ME QUEDE SIN TAREAS PARA ASIGNAR
             Integer peorProcSolParcial = getPeorTiempoDeProcesador(solucionParcial);
             if (solucionParcialEsMejorQueSolucion(solucionParcial, peorProcSolParcial)) { //SI LA SOLUCION PARCIAL ES MEJOR QUE LA SOLUCION ACTUAL
-                reemplazarMejorSolucion(solucionParcial, peorProcSolParcial);          //REEMPLAZO SOLUCION ACTUAL POR SOLUCION PARCIAL
+                reemplazarMejorSolucion(solucionParcial, peorProcSolParcial);           //REEMPLAZO SOLUCION ACTUAL POR SOLUCION PARCIAL
             }
         } else {
             Tarea nextTarea = colaTareas.remove();
             for (Procesador procesador : this.procesadores) {
-                if (poda(solucionParcial) && puedeAsignarseTareaAProcesador(procesador, nextTarea, solucionParcial, tiempoMaximoNoRefrigerado)) {
+                if (puedeAsignarseTareaAProcesador(procesador, nextTarea, solucionParcial, tiempoMaximoNoRefrigerado)) {
                     agregarTareaAProc(procesador, nextTarea, solucionParcial);
                     backtracking(tiempoMaximoNoRefrigerado, solucionParcial);
                     sacarTareaAProc(procesador, nextTarea, solucionParcial);
@@ -52,11 +52,6 @@ public class Backtracking {
             colaTareas.add(0, nextTarea);
         }
     }
-
-    private boolean poda(HashMap<Procesador, LinkedList<Tarea>> solucionParcial) {
-        return getPeorTiempoDeProcesador(solucionParcial) < peorProcesadorSolucionActual || peorProcesadorSolucionActual == 0;
-    }
-
 
     //AGREGA TAREA A LA POSIBLE SOLUCIÓN
     private void agregarTareaAProc(Procesador procesador, Tarea tarea, HashMap<Procesador, LinkedList<Tarea>> solucionParcial) {
@@ -141,7 +136,7 @@ public class Backtracking {
 
     public static void main(String[] args) {
         Backtracking solucionBacktracking = new Backtracking("datasets/Procesadores.csv", "datasets/Tareas.csv");
-        System.out.println("Mejor solución encontrada: " + solucionBacktracking.backtracking(70));
+        System.out.println("Mejor solución encontrada: " + solucionBacktracking.backtracking(170));
         System.out.println("Tiempo máximo de ejecución de la solución: " + solucionBacktracking.getTiempoMaximoEjecucionSolucion());
         System.out.println("Cantidad de estados generados: " + solucionBacktracking.getCantEstadosGenerados());
     }
