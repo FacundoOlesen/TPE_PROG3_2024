@@ -8,6 +8,7 @@ public class Procesador {
     private Boolean refrigerado;
     private Integer anio;
     private int cantTareasCriticas;
+    private int tiempoEjecucion;
 
     public Procesador(String id, String codigo, Boolean refrigerado, Integer anio) {
         this.id = id;
@@ -15,6 +16,7 @@ public class Procesador {
         this.refrigerado = refrigerado;
         this.anio = anio;
         this.cantTareasCriticas = 0;
+        this.tiempoEjecucion = 0;
     }
 
     public String getId() {
@@ -44,6 +46,18 @@ public class Procesador {
 
     public void decrementarTareasCriticas() {
         this.cantTareasCriticas--;
+    }
+
+    public int getTiempoEjecucion() {
+        return tiempoEjecucion;
+    }
+
+    public void incrementarTiempoEjecucion(int tiempoEjecucion) {
+        this.tiempoEjecucion = this.getTiempoEjecucion() + tiempoEjecucion;
+    }
+
+    public void decrementarTiempoEjecucion(int tiempoEjecucion) {
+        this.tiempoEjecucion = this.getTiempoEjecucion() - tiempoEjecucion;
     }
 
     @Override
