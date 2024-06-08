@@ -3,7 +3,7 @@ package tpe;
 public class Tarea {
     private String idTarea;
     private String nombreTarea;
-    public Integer tiempoEjecucion;
+    private Integer tiempoEjecucion;
     private Boolean esCritica;
     private Integer nivelPrioridad;
 
