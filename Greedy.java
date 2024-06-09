@@ -46,7 +46,6 @@ public class Greedy {
         Tarea tareaActual = tipoTareas.getFirst();
         Procesador procesadorParaAgregar = getMejorProcesadorParaAgregarle(tareaActual, tiempoMaximoProcNoRefrigerado);
         if (puedeAsignarseTareaAProcesador(procesadorParaAgregar, tareaActual, tiempoMaximoProcNoRefrigerado)) {
-            cantCandidatos++;
             agregarTareaAProc(procesadorParaAgregar, tareaActual);
             tipoTareas.remove(tareaActual);
             return true;
@@ -64,6 +63,7 @@ public class Greedy {
                 if (procesador.getTiempoEjecucion() < mejorProcesador.getTiempoEjecucion())
                     mejorProcesador = procesador;
             }
+            cantCandidatos++;
         }
         return mejorProcesador;
     }
@@ -144,12 +144,4 @@ public class Greedy {
             j++;
         }
     }
-
-    public static void main(String[] args) {
-        Greedy greedy = new Greedy("datasets/Procesadores.csv", "datasets/Tareas.csv");
-        System.out.println(greedy.greedy(139));
-        System.out.println("Tiempo máximo de ejecución de la solución: " + greedy.getPeorTiempoProcesador());
-        System.out.println("Cant candidatos: " + greedy.getCantCandidatos());
-    }
-
 }
