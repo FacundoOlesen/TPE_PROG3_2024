@@ -1,5 +1,6 @@
 package tpe;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 
 public class Procesador {
@@ -59,6 +60,13 @@ public class Procesador {
     public void decrementarTiempoEjecucion(int tiempoEjecucion) {
         this.tiempoEjecucion = this.getTiempoEjecucion() - tiempoEjecucion;
     }
+
+    public static Comparator<Procesador> RefrigeradoComparator = new Comparator<Procesador>() {
+        @Override
+        public int compare(Procesador p1, Procesador p2) {
+            return Boolean.compare(p2.getRefrigerado(), p1.getRefrigerado());
+        }
+    };
 
     @Override
     public String toString() {

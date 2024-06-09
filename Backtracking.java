@@ -136,7 +136,7 @@ public class Backtracking {
 
     public static void main(String[] args) {
         Backtracking solucionBacktracking = new Backtracking("datasets/Procesadores.csv", "datasets/Tareas.csv");
-        System.out.println("Mejor solución encontrada: " + solucionBacktracking.backtracking(170));
+        System.out.println("Mejor solución encontrada: " + solucionBacktracking.backtracking(70));
         System.out.println("Tiempo máximo de ejecución de la solución: " + solucionBacktracking.getTiempoMaximoEjecucionSolucion());
         System.out.println("Cantidad de estados generados: " + solucionBacktracking.getCantEstadosGenerados());
     }
