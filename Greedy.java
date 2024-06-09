@@ -11,6 +11,7 @@ public class Greedy {
     private Integer cantCandidatos;
     private LinkedList<Tarea> tareasCriticas;
     private LinkedList<Tarea> tareasNoCriticas;
+    private int peorTiempoProcesador;
 
 
     public Greedy(String pathProcesadores, String pathTareas) {
@@ -25,14 +26,15 @@ public class Greedy {
             solucion.put(p, new LinkedList<Tarea>());
         }
         ordenarTareasPorCriticidad();
-        Collections.sort(procesadores, Procesador.RefrigeradoComparator);
+        Collections.sort(procesadores, Procesador.procComparator);
         this.cantCandidatos = 0;
+        this.peorTiempoProcesador = 0;
     }
 
     public HashMap<Procesador, LinkedList<Tarea>> greedy(Integer tiempoMaximoProcNoRefrigerado) {
+        if (tareasCriticas.size() > procesadores.size() * 2) return new HashMap<>();
         while (!tareasCriticas.isEmpty()) {
             if (!greedy(tareasCriticas, tiempoMaximoProcNoRefrigerado)) return new HashMap<>();
-
         }
         while (!tareasNoCriticas.isEmpty()) {
             if (!greedy(tareasNoCriticas, tiempoMaximoProcNoRefrigerado)) return new HashMap<>();
@@ -48,8 +50,10 @@ public class Greedy {
             agregarTareaAProc(procesadorParaAgregar, tareaActual);
             tipoTareas.remove(tareaActual);
             return true;
-        } else
+        } else {
+            peorTiempoProcesador = -1;
             return false;
+        }
     }
 
 
@@ -70,8 +74,10 @@ public class Greedy {
         procesador.incrementarTiempoEjecucion(tarea.getTiempoEjecucion());
         listaTareas.add(tarea);
         if (tarea.getEsCritica()) procesador.incrementarTareasCriticas();
-
+        if (procesador.getTiempoEjecucion() > peorTiempoProcesador)
+            peorTiempoProcesador = procesador.getTiempoEjecucion();
     }
+
 
     private boolean puedeAsignarseTareaAProcesador(Procesador procesador, Tarea tarea, Integer tiempoMaximoProcNoRefrigerado) {
         if (procesador.getCantTareasCriticas() == 2 && tarea.getEsCritica()) return false;
@@ -80,10 +86,14 @@ public class Greedy {
         return true;
     }
 
+
     public Integer getCantCandidatos() {
         return cantCandidatos;
     }
 
+    public int getPeorTiempoProcesador() {
+        return peorTiempoProcesador;
+    }
 
     public void ordenarTareasPorCriticidad() {
         for (Tarea tarea : colaTareas) {
@@ -93,6 +103,7 @@ public class Greedy {
         mergesort(tareasCriticas, 0, tareasCriticas.size() - 1);
         mergesort(tareasNoCriticas, 0, tareasNoCriticas.size() - 1);
     }
+
 
     private void mergesort(LinkedList<Tarea> tareas, int low, int high) {
         int size = tareas.size();
@@ -136,7 +147,8 @@ public class Greedy {
 
     public static void main(String[] args) {
         Greedy greedy = new Greedy("datasets/Procesadores.csv", "datasets/Tareas.csv");
-        System.out.println(greedy.greedy(70));
+        System.out.println(greedy.greedy(139));
+        System.out.println("Tiempo máximo de ejecución de la solución: " + greedy.getPeorTiempoProcesador());
         System.out.println("Cant candidatos: " + greedy.getCantCandidatos());
     }
 

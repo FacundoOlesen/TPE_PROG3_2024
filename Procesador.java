@@ -61,7 +61,7 @@ public class Procesador {
         this.tiempoEjecucion = this.getTiempoEjecucion() - tiempoEjecucion;
     }
 
-    public static Comparator<Procesador> RefrigeradoComparator = new Comparator<Procesador>() {
+    public static Comparator<Procesador> procComparator = new Comparator<Procesador>() {
         @Override
         public int compare(Procesador p1, Procesador p2) {
             return Boolean.compare(p2.getRefrigerado(), p1.getRefrigerado());
