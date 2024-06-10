@@ -25,12 +25,31 @@ public class Greedy {
         for (Procesador p : procesadores) {
             solucion.put(p, new LinkedList<Tarea>());
         }
-        ordenarTareasPorCriticidad();
+        for (Tarea tarea : colaTareas) {
+            if (tarea.getEsCritica()) tareasCriticas.add(tarea);
+            else tareasNoCriticas.add(tarea);
+        }
+        Collections.sort(tareasCriticas, Tarea.TiempoEjecucionComparator);
+        Collections.sort(tareasNoCriticas, Tarea.TiempoEjecucionComparator);
         Collections.sort(procesadores, Procesador.procComparator);
         this.cantCandidatos = 0;
         this.peorTiempoProcesador = 0;
     }
 
+    /*
+    La ténica utilizida posee una cola de tareas con una lista de procesadores.
+    Lo que se hace es ordenar las tareas de mayor a menor en 2 listas: una para las tareas críticas
+    y otra para las no críticas.
+    Luego, se agregan todas las tareas críticas de mayor a menor en los procesadores,
+    y después las no críticas de mayor a menor también.
+    Cada vez que se va a agregar una tarea se busca el procesador más adecuado para agregarle
+    esa tarea teniendo en cuenta el tiempo de ejecución del procesador (se agarra el que tiene menos tiempo
+    hasta el momento y al tener las tareas de mayor a menor se agarra la tarea de mayor tiempo, entonces
+    se logra combinar el procesador de menor tiempo con la tarea de mayor tiempo) y las restricciones dadas
+    (cant. de tareas críticas por procesador y tiempoMax para los p. no refrigerados). En caso de que se
+    pueda agregar, se continúa con el algoritmo, y en caso de que no se encuentre ningún procesador
+    disponible, se devuelve que no hay una solución encontrada.
+     */
     public HashMap<Procesador, LinkedList<Tarea>> greedy(Integer tiempoMaximoProcNoRefrigerado) {
         if (tareasCriticas.size() > procesadores.size() * 2) return new HashMap<>();
         while (!tareasCriticas.isEmpty()) {
@@ -93,55 +112,5 @@ public class Greedy {
 
     public int getPeorTiempoProcesador() {
         return peorTiempoProcesador;
-    }
-
-    public void ordenarTareasPorCriticidad() {
-        for (Tarea tarea : colaTareas) {
-            if (tarea.getEsCritica()) tareasCriticas.add(tarea);
-            else tareasNoCriticas.add(tarea);
-        }
-        mergesort(tareasCriticas, 0, tareasCriticas.size() - 1);
-        mergesort(tareasNoCriticas, 0, tareasNoCriticas.size() - 1);
-    }
-
-
-    private void mergesort(LinkedList<Tarea> tareas, int low, int high) {
-        int size = tareas.size();
-        Tarea[] helper = new Tarea[size];
-        if (low < high) {
-            int middle = (low + high) / 2;
-            mergesort(tareas, low, middle);
-            mergesort(tareas, middle + 1, high);
-            merge(tareas, helper, low, middle, high);
-        }
-    }
-
-    private void merge(LinkedList<Tarea> tareas, Tarea[] helper, int low, int middle, int high) {
-        for (int i = low; i <= high; i++) {
-            helper[i] = tareas.get(i);
-        }
-        int i = low;
-        int j = middle + 1;
-        int k = low;
-        while (i <= middle && j <= high) {
-            if (helper[i].getTiempoEjecucion() > helper[j].getTiempoEjecucion()) {
-                tareas.set(k, helper[i]);
-                i++;
-            } else {
-                tareas.set(k, helper[j]);
-                j++;
-            }
-            k++;
-        }
-        while (i <= middle) {
-            tareas.set(k, helper[i]);
-            k++;
-            i++;
-        }
-        while (j <= high) {
-            tareas.set(k, helper[i]);
-            k++;
-            j++;
-        }
     }
 }

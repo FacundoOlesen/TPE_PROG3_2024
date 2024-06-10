@@ -17,14 +17,12 @@ public class Servicios {
     private LinkedList<Tarea> tareasNoCriticas;
     private TareasPorPrioridad[] tareasPorPrioridad;
 
-    /*
-     * COMPLEJIDAD O(N) DONDE N ES LA CANTIDAD DE TAREAS
-     */
+
+    /*La operación más costosa del Constructor es la de agregar todas las tareas a las
+    estructuras utilizadas para los servicios teniendo que recorrer TODAS las tareas.
+    Esto nos genera una complejidad de O(N) donde N es la cantidad de tareas.*/
     public Servicios(String pathProcesadores, String pathTareas) {
         CSVReader reader = new CSVReader();
-        reader.readProcessors(pathProcesadores);
-        reader.readTasks(pathTareas);
-
         List<Tarea> listaTareas = reader.readTasks(pathTareas);
 
         this.tareas = new HashMap<>();
@@ -33,44 +31,44 @@ public class Servicios {
         this.tareasPorPrioridad = new TareasPorPrioridad[101];
 
         for (Tarea tarea : listaTareas) {
-            tareas.put(tarea.getIdTarea(), tarea); //MAPEO SERVICIO 1 O(1)
-            this.addTareaPorCriticidad(tarea.getEsCritica(), tarea); //MAPEO SERVICIO 2 O(1)
-            this.addTareaAPrioridad(tarea.getNivelPrioridad(), tarea); //MAPEO SERVICIO 3 O(1)
+            tareas.put(tarea.getIdTarea(), tarea);
+            this.addTareaPorCriticidad(tarea.getEsCritica(), tarea);
+            this.addTareaAPrioridad(tarea.getNivelPrioridad(), tarea);
         }
     }
 
-
-    /*
-     * O(1)
-     */
+    /*La Complejidad Temporal del Servicio 1 es O(1) ya que el HashMap hace 1 solo acceso
+    con la funcion mod para obtener un elemento de su estructura.*/
     public Tarea servicio1(String ID) {
         return tareas.get(ID);
     }
 
 
-    /*
-     * Expresar la complejidad temporal del servicio 2.
-     */
-    //OBTENER TAREAS POR CRITICIDAD O(1)
+    /*La Complejidad Temporal del Servicio 2 es O(1) ya que al dividir las tareas por criticidad en
+      2 listas, si queremos ver las tareas criticas obtenemos la lista de tareas criticas O(1) y si
+      queremos ver las no criticas obtenemos la lista de tareas no criticas O(1).*/
     public List<Tarea> servicio2(boolean esCritica) {
         if (esCritica)
             return tareasCriticas;
         return tareasNoCriticas;
     }
 
-    //AGREGAR TAREAS POR CRITICIDAD O(1)
+    /*El método utilizado para agregar tareas a las listas de criticidad dependiendo si es crítica o no
+     es O(1) también ya que LinkedList tiene una complejidad de O(1) para insertar elementos.*/
     public void addTareaPorCriticidad(boolean esCritica, Tarea tarea) {
         if (esCritica)
             tareasCriticas.add(tarea);
         else
-            tareasCriticas.add(tarea);
+            tareasNoCriticas.add(tarea);
     }
 
 
     /*
-     * O(N) donde N es la cantidad de tareas.
+     Obtener las tareas entre 2 niveles de prioridad dados tiene una Complejidad de O(N) donde N
+     es la cantidad de tareas ya que en el peor de los casos nos pasaran la prioridad mínima que
+     pueden tener las tareas y la prioridad máxima, obligandonos de esta forma a recorrer toda
+     la lista de tareas.
      */
-    //OBTENER LAS TAREAS ENTRE LAS PRIORIDADES O(prioridadSuperior - prioridadInferior) = O(n) EN EL PEOR CASO
     public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
         if (prioridadInferior < 0 || prioridadSuperior > 100) {
             return null;
@@ -87,6 +85,12 @@ public class Servicios {
         }
     }
 
+    /*
+    La complejidad temporal de insertar un elemento en la lista de solución
+    es de O(1) ya que previamente asignamos el arreglo con los espacios
+    necesarios para evitar los corrimientos que este realiza al querer
+    insertar un elemento cuando ya no hay más espacio.
+    */
     public void addTareaAPrioridad(Integer prioridad, Tarea tarea) {
         if (prioridad >= 0 && prioridad <= 100) {
             if (tareasPorPrioridad[prioridad] == null)

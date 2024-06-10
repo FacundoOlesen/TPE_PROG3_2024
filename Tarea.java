@@ -1,5 +1,7 @@
 package tpe;
 
+import java.util.Comparator;
+
 public class Tarea {
     private String idTarea;
     private String nombreTarea;
@@ -54,6 +56,13 @@ public class Tarea {
     public void setNivelPrioridad(Integer nivelPrioridad) {
         this.nivelPrioridad = nivelPrioridad;
     }
+
+    public static Comparator<Tarea> TiempoEjecucionComparator = new Comparator<Tarea>() {
+        @Override
+        public int compare(Tarea t1, Tarea t2) {
+            return Integer.compare(t2.getTiempoEjecucion(), t1.getTiempoEjecucion());
+        }
+    };
 
     @Override
     public String toString() {
