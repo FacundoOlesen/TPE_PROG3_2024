@@ -30,9 +30,7 @@ public class Backtracking {
             solucionParcial.put(p, new LinkedList<Tarea>());
         }
         backtracking(tiempoMaximoProcNoRefrigerado, solucionParcial);
-        if (!existeSolucion) {
-            return new HashMap<>();
-        }
+        imprimirSolucion();
         return solucion;
     }
 
@@ -122,18 +120,42 @@ public class Backtracking {
             solucion.get(procesador).clear();
             solucion.get(procesador).addAll(tareasSolucionParcial);
         }
+        procesadoresFinales = solucion.keySet().iterator();
         this.peorProcesadorSolucionActual = peorProcSolParcial;
         existeSolucion = true;
     }
 
+    private Iterator<Procesador> procesadoresFinales;
+
     //Obtiene el tiempo de ejecución del peor procesador de la mejor solución encontrada.
     public Integer getTiempoMaximoEjecucionSolucion() {
-        if (!existeSolucion)
-            return -1;
         return peorProcesadorSolucionActual;
     }
 
     public int getCantEstadosGenerados() {
         return cantEstadosGenerados;
+    }
+
+    private void imprimirSolucion() {
+        if (existeSolucion) {
+            while (procesadoresFinales.hasNext()) {
+                Procesador p = procesadoresFinales.next();
+                int ti = 0;
+                int c = 0;
+                for (Tarea t : solucion.get(p)) {
+                    ti += t.getTiempoEjecucion();
+                    if (t.getEsCritica()) c++;
+                }
+                System.out.println("\n Procesador " + p.getId() + "\n\t Está refrigerado?:" + p.getRefrigerado() + "\n\t Tiempo de ejecución total: " + ti + "\n\t Cantidad de tareas criticas: " + c);
+                System.out.println(" \t" + solucion.get(p));
+            }
+            System.out.println("Tiempo máximo de ejecución de la solución: " + getTiempoMaximoEjecucionSolucion());
+            System.out.println("Cantidad de estados generados: " + getCantEstadosGenerados());
+        } else {
+            System.out.println("No se encontró solución válida.");
+            System.out.println("Tiempo máximo de ejecución de la solución: " + "-1 (no se encontró solución)");
+            System.out.println("Cantidad de candidatos: " + getCantEstadosGenerados());
+
+        }
     }
 }

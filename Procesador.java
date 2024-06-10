@@ -70,6 +70,11 @@ public class Procesador {
 
     @Override
     public String toString() {
-        return id;
+        return "\n[Procesador{" +
+                "id='" + id + '\'' +
+                ", refrigerado=" + refrigerado +
+                ", cantTareasCriticas=" + cantTareasCriticas +
+                ", tiempoEjecucion=" + tiempoEjecucion +
+                '}';
     }
 }

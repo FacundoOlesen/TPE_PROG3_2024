@@ -45,10 +45,10 @@ public class Greedy {
     Cada vez que se va a agregar una tarea se busca el procesador más adecuado para agregarle
     esa tarea teniendo en cuenta el tiempo de ejecución del procesador (se agarra el que tiene menos tiempo
     hasta el momento y al tener las tareas de mayor a menor se agarra la tarea de mayor tiempo, entonces
-    se logra combinar el procesador de menor tiempo con la tarea de mayor tiempo) y las restricciones dadas
-    (cant. de tareas críticas por procesador y tiempoMax para los p. no refrigerados). En caso de que se
-    pueda agregar, se continúa con el algoritmo, y en caso de que no se encuentre ningún procesador
-    disponible, se devuelve que no hay una solución encontrada.
+    se logra combinar el procesador de menor tiempo con la tarea de mayor tiempo manteniendo así equilibrado todos los tiempos
+    de los procesadores) y las restricciones dadas (cant. de tareas críticas por procesador y tiempoMax para los p. no refrigerados).
+    En caso de que se pueda agregar, se continúa con el algoritmo, y en caso de que no se encuentre ningún procesador disponible,
+    se devuelve que no hay una solución encontrada.Si pudimos asignar todas las tareas a los procesadores obtendremos la solución.
      */
     public HashMap<Procesador, LinkedList<Tarea>> greedy(Integer tiempoMaximoProcNoRefrigerado) {
         if (tareasCriticas.size() > procesadores.size() * 2) return new HashMap<>();
@@ -63,22 +63,23 @@ public class Greedy {
 
     private boolean greedy(LinkedList<Tarea> tipoTareas, Integer tiempoMaximoProcNoRefrigerado) {
         Tarea tareaActual = tipoTareas.getFirst();
-        Procesador procesadorParaAgregar = getMejorProcesadorParaAgregarle(tareaActual, tiempoMaximoProcNoRefrigerado);
-        if (puedeAsignarseTareaAProcesador(procesadorParaAgregar, tareaActual, tiempoMaximoProcNoRefrigerado)) {
+        Procesador procesadorParaAgregar = seleccionar(tareaActual, tiempoMaximoProcNoRefrigerado);
+        if (factible(procesadorParaAgregar, tareaActual, tiempoMaximoProcNoRefrigerado)) {
             agregarTareaAProc(procesadorParaAgregar, tareaActual);
             tipoTareas.remove(tareaActual);
             return true;
         } else {
+            System.out.println("No se encontró solución válida.");
             peorTiempoProcesador = -1;
             return false;
         }
     }
 
 
-    private Procesador getMejorProcesadorParaAgregarle(Tarea tarea, Integer tiempoMaximoProcNoRefrigerado) {
+    private Procesador seleccionar(Tarea tarea, Integer tiempoMaximoProcNoRefrigerado) {
         Procesador mejorProcesador = procesadores.getFirst();
         for (Procesador procesador : procesadores) {
-            if (puedeAsignarseTareaAProcesador(procesador, tarea, tiempoMaximoProcNoRefrigerado)) {
+            if (factible(procesador, tarea, tiempoMaximoProcNoRefrigerado)) {
                 if (procesador.getTiempoEjecucion() < mejorProcesador.getTiempoEjecucion())
                     mejorProcesador = procesador;
             }
@@ -98,7 +99,7 @@ public class Greedy {
     }
 
 
-    private boolean puedeAsignarseTareaAProcesador(Procesador procesador, Tarea tarea, Integer tiempoMaximoProcNoRefrigerado) {
+    private boolean factible(Procesador procesador, Tarea tarea, Integer tiempoMaximoProcNoRefrigerado) {
         if (procesador.getCantTareasCriticas() == 2 && tarea.getEsCritica()) return false;
         if (!procesador.getRefrigerado() && procesador.getTiempoEjecucion() + tarea.getTiempoEjecucion() > tiempoMaximoProcNoRefrigerado)
             return false;
