@@ -37,15 +37,19 @@ public class Backtracking {
     /*
     El Backtracking implementado consta de una lista de procesadores y una cola de tareas.
     Se recorren los procesadores y se va obteniendo el primer elemento de la cola de tareas
-    eliminandolo de la cola antes de la recursión. Luego, la tarea obtenida se agrega al primer
-    procesador obtenido con el for y se accede a la recursión hasta que todas las tareas fueron
-    asignadas (la cola de tareas está vácia). Una vez que asigne todas las tareas a procesadores
-    (o sea que me quedé sin tareas en la cola de tareas) se vuelve al estado anterior luego de
-    la recursión: se le quita la tarea al procesador y se vuelve a agregar la tarea a la cola
-    volviendo al estado anterior para poder obtener el siguiente procesador y probar la tarea
-    en ese nuevo procesador.
+    eliminandolo de la cola antes de la recursión. Luego, si la tarea puede agregarse al procesador dado (teniendo en cuenta
+    las restricciones de la cant. de tareas críticas y tiempo máximo de procesadores no refrigerados)
+    y si se cumple la condición de poda (que el tiempo máximo de ejecución de la solución construida hasta el momento
+    no sobrepase el tiempo máximo de ejecución de la solución actual) la tarea obtenida se agrega al
+    primer procesador obtenido con el for y se accede a la recursión hasta que todas las tareas fueron asignadas
+    (la cola de tareas está vácia).
+    Si no, se puede agregar la tarea, pido el siguiente procesador hasta quedarme sin procesadores.
+    Una vez que asigne todas las tareas a procesadores (o sea que me quedé sin tareas en la cola de tareas)
+    se vuelve al estado anterior luego de la recursión: se le quita la tarea al procesador
+    y se vuelve a agregar la tarea a la cola volviendo al estado anterior para poder obtener el
+    siguiente procesador y probar la tarea en ese nuevo procesador.
     De esta forma generamos todas las combinaciones  posibles de tareas y procesadores pudiendo
-    encontrar la mejor siempre.
+    encontrar la mejor solución siempre.
     */
     private void backtracking(Integer tiempoMaximoNoRefrigerado, HashMap<Procesador, LinkedList<Tarea>> solucionParcial) {
         this.cantEstadosGenerados++;
@@ -57,7 +61,7 @@ public class Backtracking {
         } else {
             Tarea nextTarea = colaTareas.remove();
             for (Procesador procesador : this.procesadores) {
-                if (puedeAsignarseTareaAProcesador(procesador, nextTarea, tiempoMaximoNoRefrigerado)) {
+                if (puedeAsignarseTareaAProcesador(procesador, nextTarea, tiempoMaximoNoRefrigerado) && poda(solucionParcial)) {
                     agregarTareaAProc(procesador, nextTarea, solucionParcial);
                     backtracking(tiempoMaximoNoRefrigerado, solucionParcial);
                     sacarTareaAProc(procesador, nextTarea, solucionParcial);
@@ -66,6 +70,7 @@ public class Backtracking {
             colaTareas.add(0, nextTarea);
         }
     }
+
 
     //Agrega tarea a la posible solución.
     private void agregarTareaAProc(Procesador procesador, Tarea tarea, HashMap<Procesador, LinkedList<Tarea>> solucionParcial) {
@@ -130,6 +135,10 @@ public class Backtracking {
     //Obtiene el tiempo de ejecución del peor procesador de la mejor solución encontrada.
     public Integer getTiempoMaximoEjecucionSolucion() {
         return peorProcesadorSolucionActual;
+    }
+
+    private boolean poda(HashMap<Procesador, LinkedList<Tarea>> solucionParcial) {
+        return getPeorTiempoDeProcesador(solucionParcial) < peorProcesadorSolucionActual || peorProcesadorSolucionActual == 0;
     }
 
     public int getCantEstadosGenerados() {

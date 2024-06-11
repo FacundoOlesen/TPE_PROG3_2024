@@ -39,7 +39,7 @@ public class Main {
 
         System.out.println("SOLUCIÓN BACKTRACKING");
         Backtracking backtracking = new Backtracking("datasets/Procesadores.csv", "datasets/Tareas.csv");
-        backtracking.backtracking(122);
+        backtracking.backtracking(100);
 
 
         System.out.println("");
@@ -52,7 +52,7 @@ public class Main {
         System.out.println("SOLUCIÓN GREEDY");
 
         Greedy greedy = new Greedy("datasets/Procesadores.csv", "datasets/Tareas.csv");
-        System.out.println(greedy.greedy(122));
+        System.out.println(greedy.greedy(100));
         System.out.println("Tiempo máximo de ejecución de la solución: " + greedy.getPeorTiempoProcesador());
         System.out.println("Cant candidatos: " + greedy.getCantCandidatos());
     }

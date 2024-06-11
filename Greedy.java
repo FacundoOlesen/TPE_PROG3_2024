@@ -48,7 +48,7 @@ public class Greedy {
     se logra combinar el procesador de menor tiempo con la tarea de mayor tiempo manteniendo así equilibrado todos los tiempos
     de los procesadores) y las restricciones dadas (cant. de tareas críticas por procesador y tiempoMax para los p. no refrigerados).
     En caso de que se pueda agregar, se continúa con el algoritmo, y en caso de que no se encuentre ningún procesador disponible,
-    se devuelve que no hay una solución encontrada.Si pudimos asignar todas las tareas a los procesadores obtendremos la solución.
+    se devuelve que no hay una solución encontrada. Si pudimos asignar todas las tareas a los procesadores obtendremos la solución.
      */
     public HashMap<Procesador, LinkedList<Tarea>> greedy(Integer tiempoMaximoProcNoRefrigerado) {
         if (tareasCriticas.size() > procesadores.size() * 2) return new HashMap<>();

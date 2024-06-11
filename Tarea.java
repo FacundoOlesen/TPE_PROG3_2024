@@ -67,7 +67,7 @@ public class Tarea {
     @Override
     public String toString() {
         return
-                "\n\t[idTarea='" + idTarea + '\'' +
+                "\n\t\t[idTarea='" + idTarea + '\'' +
                         "nombreTarea='" + nombreTarea + '\'' +
                         ", tiempoEjecucion=" + tiempoEjecucion +
                         ", esCritica=" + esCritica +
